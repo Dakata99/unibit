@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <header>
+        <h2>Код от презентацията (от упражнението)</h2>
+    </header>
+
+    <h3>Работа с масиви</h3>
+    <script src="task1.js"></script>
+    
+    <h3>Примери за изполване на методи за намиране на елемент и модифициране на елементи</h3>
+    <p class="note" id="pr1" onclick="changeText()">Text</p>
+    <p id="id1">Този елемент е с id = "id1".</p>
+    <button onclick="findElement()">Търси</button>
+    <button onclick="alertText()">Покажи стойността</button>
+    <button onclick="colorText()">Оцвети текст</button>
+    <script src="task2.js"></script>
+
+    <h3 id="hd3">DOM методи за създавене и премахване на елементи</h3>
+    <button onclick="createHTMLElement()">Създай елемент</button>
+    <ul id="items">
+        <li>Item 1</li>
+    </ul>
+    <button onclick="addElementToList()">Добави елемент към списъка</button>
+    <button onclick="removeLastElementFromList()">Премахни последния елемент от списъка</button>
+    <button onclick="cloneList()">Клонирай списъка</button>
+    <script src="task3.js"></script>
+
+    <h3>Работа с атрибути</h3>
+    <a href="https://www.wikipedia.org/" target="_blank" id="wiki">wikipedia</a>
+    <button id="btnDisable" onclick="disableButton()">Изпрати</button>
+    <button id="btnDisable" onclick="attributeOfTag()">Покажи таг</button>
+    <script src="task4.js"></script>
+
+    <h3>Задачки</h3>
+    <script src="tasks1.js"></script>
+
+    <h3>Задачи свързани със събития</h3>
+    <button onclick="alert('Натиснахте бутона!')">Натисни</button>
+    <button id="btnChng" onclick="changeButton()">Промяна на бутон</button>
+    <p id="pr2" onmouseover="changeText1()" onmouseleave="changeText2()">bla bla blabla bla blalab blab blabla</p>
+    <script src="tasks2.js"></script>
+
+    <h3>Задачи JS промяна на стиловото</h3>
+    <div class="box" onclick="changeStyle()">
+        <p>blabla</p>
+    </div>
+    <button id="clrBtn" onclick="changeBtnColor()">Клик</button>
+    <script src="tasks3.js"></script><br><br><br><br><br><br>
+
+    <h3>Примери</h3>
+    <p id="t4">Some text</p>
+    <form>
+        <input type="text">
+    </form>
+    <button>Button</button>
+    <button disabled>Button disabled</button>
+    <input id="inputLength" type="text">length: <span id="length">0</span>
+    <form id="f2" action="submit.html">
+        <label>Value: </label><input type="text" name="value">
+        <button type="submit">Save</button>
+    </form>
+    <form>
+        <input type="checkbox" id="red">
+        <label for="red">Червен цвят</label>
+    </form>
+    <form>
+        <label>Color:</label>
+        <input type="radio" name="color" value="purple">
+        <label>Purple</label>
+        <input type="radio" name="color" value="green">
+        <label>Green</label>
+        <input type="radio" name="color" value="blue">
+        <label>Blue</label>
+    </form>
+    <form>
+        <select multiple>
+            <option value="1">0001</option>
+            <option value="2">0010</option>
+            <option value="4">0100</option>
+            <option value="8">1000</option>
+        </select> = <span id="output">0</span>
+    </form>
+    <form>
+        <input id="fileInput" type="file">
+    </form>
+    <form name="form1">
+        <label>Word</label>
+        <input type="text" name="text1" id="text1"><br>
+        <textarea name="ta1" id="ta1" cols="25" rows="15"></textarea><br>
+        <input type="button" value="Add" onclick="addWord()"><br>
+    </form>
+    
+    <form name="form2">
+        <label>Email:</label>
+        <input type="text" name="email" id="email">
+        <input type="button" value="Check" onclick="check()">
+    </form>
+    <span id="span1"></span>
+    <br>
+    <script src="presentation_examples.js"></script>
+
+</body>
+</html>

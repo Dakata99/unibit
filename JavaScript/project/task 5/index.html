@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 5</title>
+</head>
+<body>
+    <form name="car-registration">
+        <fieldset style="width: 35%;">
+            <legend>Registration form</legend>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Brand:</td>
+                        <td><input id="brand" type="text" required></td>
+                    </tr>
+                    <tr>
+                        <td>Model:</td>
+                        <td><input type="text" id="model" required></td>
+                    </tr>
+                    <tr>
+                        <td>Year:</td>
+                        <td><input type="date" id="year" required></td>
+                    </tr>
+                    <tr>
+                        <td>Vehicle Identification Number:</td>
+                        <td><input type="text" id="vin" required></td>
+                    </tr>
+                    <tr>
+                        <td>Engine type:</td>
+                        <td>
+                            <select id="engine">
+                                <option>Gasoline</option>
+                                <option>Disel</option>
+                                <option>Electric</option>
+                                <option>Hybrid</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Transmission type:</td>
+                        <td>
+                            <input type="radio" id="manual" name="transmission" value="Manual" required>
+                            <label for="manual">Manual</label>
+                            <input type="radio" id="automated" name="transmission" value="Automated">
+                            <label for="automated">Automated</label>
+                            <input type="radio" id="half-automated" name="transmission" value="Half-automated">
+                            <label for="half-automated">Half-automated</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><button type="button" id="submitBtn2" onclick="registration()">Register</td>
+                        <td><input type="submit" onclick="registration()">Register</td>
+                    </tr>
+                </tbody>
+            </table>
+        </fieldset>
+    </form>
+
+    <script>
+        class Car {
+            constructor(brand, model, year, vin, engine, transmission) {
+                this.brand = brand;
+                this.model = model;
+                this.year = year;
+                this.vin = vin;
+                this.engine = engine;
+                this.transmission = transmission;
+            }
+            print() {
+                console.log("Brand: " + this.brand);
+                console.log("Model: " + this.model);
+                console.log("Year: " + this.year);
+                console.log("Vin: " + this.vin);
+                console.log("Engine: " + this.engine);
+                console.log("Transmission: " + this.transmission);
+            }
+        }
+
+        function registration() {
+            let brand = document.getElementById("brand").value;
+            let model = document.getElementById("model").value;
+            let year = document.getElementById("year").value;
+            let vin = document.getElementById("vin").value;
+            let engine = document.getElementById("engine").value;
+            let transmissions = document.getElementsByName("transmission");
+
+            let transmission = null;
+            for (let i = 0; i < transmissions.length; i++) {
+                if (transmissions[i].checked) {
+                    transmission = transmissions[i].value;
+                }
+            }
+
+            // Create the car
+            let car = new Car(brand, model, year, vin, engine, transmission);
+
+            // For each car create a paragraph
+            let para = document.createElement('p');
+            // Using JSON.stringify for better serialization of the data
+            let node = document.createTextNode(JSON.stringify(car));
+            para.appendChild(node);
+            document.body.appendChild(para);
+        }
+    </script>
+</body>
+</html>

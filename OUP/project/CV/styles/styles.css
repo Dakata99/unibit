@@ -1,0 +1,158 @@
+/* General style settings */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+ul {
+    list-style: none;
+}
+
+.page {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    color: white;
+    background: linear-gradient(45deg, #49a09d, #5f2c82);
+}
+
+/* Description style settings */
+.description {
+    width: 100%;
+    height: auto;
+    text-align: justify;
+}
+
+.description img {
+    width: 150px;
+    height: 150px;
+    float: right;
+    border-radius: 50%;
+    border: 5px solid white;
+}
+
+.description h1,
+.description h3 {
+    color: white;
+    margin: 0px;
+}
+
+.multi-column-text {
+    column-count: 2;
+    column-gap: 30px;
+    column-rule: 2px solid white;
+    column-rule-style: dashed;
+    padding-right: 20px;
+    margin: 10px 0px 0px 0px;
+}
+
+/* Contacts style settings */
+.fa,
+.fas,
+.fab,
+.far {
+    margin: 0px 5px 0px 0px;
+}
+
+.contacts {
+    width: 100%;
+    height: auto;
+    text-align: center;
+}
+
+.contacts ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+.contacts ul li {
+    display: inline;
+    margin: 0px 10px 0px 10px;
+}
+
+.contacts ul li a {
+    text-decoration: none;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.contacts ul li a:hover {
+    color: black;
+}
+
+/* Bottom block settings */
+.bottom {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.bottom h2,
+.bottom h3 {
+    color: white;
+    margin: 10px 0px 10px 0px;
+    text-shadow: 5px 5px 5px black;
+}
+
+.bottom h4 {
+    margin: 5px 0px 5px 0px;
+}
+
+.bottom hr {
+    width: 90%;
+    filter: blur(5px);
+}
+
+.bottom .fas,
+.bottom .far {
+    margin-right: 10px;
+}
+
+/* Left subpage style settings - work experience, education, hobbies */
+.left-bottom {
+    width: 50%;
+}
+
+.left-bottom ul {
+    margin: 5px 0px 0px 0px;
+}
+
+.left-bottom i {
+    margin-top: 5px;
+}
+
+figure {
+    border: 1px #cccccc solid;
+    padding: 4px;
+    width: 200px;
+    height: auto;
+}
+
+figure img {
+    width: 200px;
+    height: 150px;
+}
+
+figcaption {
+    color: white;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+/* Right subpage style settings - skills, projects */
+.right-bottom {
+    width: 50%;
+}
+
+/* Skills table style settings */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+}
+
+th,
+td {
+    padding: 5px;
+    text-align: center;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+}

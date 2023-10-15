@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 3</title>
+
+    <style>
+        .slideshow {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .slideshow img {
+            width: 350px;
+            height: 350px;
+        }
+
+        .left {
+            position: absolute;
+            left: 520px;
+            bottom: 50%;
+        }
+
+        .right {
+            position: absolute;
+            right: 520px;
+            bottom: 50%;
+        }
+
+        .slideshow button {
+            width: 20px;
+            height: 20px;
+            border-radius: 40%;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <figure class="slideshow">
+        <button class="left" onclick="slideLeft()"></button>
+        <img id="slide" src="1.jpg" alt="Image 1">
+        <button class="right" onclick="slideRight()"></button>
+        <figcaption>
+            <button type="button" onclick="slideshow(1)"></button>
+            <button type="button" onclick="slideshow(2)"></button>
+            <button type="button" onclick="slideshow(3)"></button>
+            <button type="button" onclick="slideshow(4)"></button>
+            <button type="button" onclick="slideshow(5)"></button>
+        </figcaption>
+    </figure>
+
+    <script>
+        let idx = 1;
+        const gallery = [
+            { key: "Image 1", value: "1.jpg" },
+            { key: "Image 2", value: "2.jpg" },
+            { key: "Image 3", value: "3.jpg" },
+            { key: "Image 4", value: "4.jpg" },
+            { key: "Image 5", value: "5.jpg" },
+        ];
+
+        function slideshow(index) {
+            let img = document.getElementById("slide");
+
+            switch (index) {
+                case 1:
+                    img.alt = gallery[0].key;
+                    img.src = gallery[0].value;
+                    idx = 1;
+                    break;
+                case 2:
+                    img.alt = gallery[1].key;
+                    img.src = gallery[1].value;
+                    idx = 2;
+                    break;
+                case 3:
+                    img.alt = gallery[2].key;
+                    img.src = gallery[2].value;
+                    idx = 3;
+                    break;
+                case 4:
+                    img.alt = gallery[3].key;
+                    img.src = gallery[3].value;
+                    idx = 4;
+                    break;
+                case 5:
+                    img.alt = gallery[4].key;
+                    img.src = gallery[4].value;
+                    idx = 5;
+                    break;
+            }
+        }
+
+        function slideLeft() {
+            if (idx > 1) {
+                slideshow(--idx);
+            }
+        }
+
+        function slideRight() {
+            if (idx < 5) {
+                slideshow(++idx);
+            }
+        }
+    </script>
+</body>
+</html>

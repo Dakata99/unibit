@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slideshow</title>
+
+    <style type="text/css">
+        #mypic img {
+            height: 500px;
+            width: auto;
+        }
+    </style>
+</head>
+<body onload="slideshow(0)">
+    <div style="text-align: center;">
+        <img id="mypic" name="mypic" border="0">
+        <br>
+        
+        <div id="descr">Picture</div>
+        <button type="button" id="Prev" onclick="slideshowBack(); return false">Previous</button>
+        <button type="button" id="Next" onclick="slideshowUp(); return false">Next</button>
+    </div>
+
+    <script src="slideshow.js"></script>
+</body>
+</html>

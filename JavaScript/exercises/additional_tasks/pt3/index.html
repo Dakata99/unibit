@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <h1>Web design</h1>
+        <nav>
+            <ul>
+                <li>Home</li>
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+            </ul>
+        </nav>
+        <hr>
+    </header>
+
+    <div class="page">
+        <div class="left-subpage">
+            <h3>Регистрация</h3>
+            <form id="registation">
+                <fieldset>
+                    <legend>Регистрационна форма</legend>
+                    <!-- NOTE: there will be no restrictions to what the below will be. 
+                        Wont add them for now, so its not too deeply -->
+                    <labe>Име</labe><br>
+                    <input id="name" type="text" required><br>
+
+                    <labe>Фамилия</labe><br>
+                    <input id="lname" type="text" required><br>
+                    <!-- Here could be inserted the function from the presentation examples
+                         for validating the email, but it will be copy-paste, so wont do it. -->
+                    <labe>Email</labe><br>
+                    <input id="email" type="text" required><br>
+
+                    <labe>Потребителско име</labe><br>
+                    <input id="uname" type="text" required><br>
+
+                    <labe>Парола</labe><br>
+                    <input id="passwd" type="password" required><br>
+
+                    <button type="button" id="reg" onclick="registration()">Изпрати</button>
+                    <span id="regStatus"></span>
+                </fieldset>
+            </form>
+        </div>
+
+        <div class="right-subpage">
+            <h3>Вход</h3>
+            <form name="log">
+                <fieldset>
+                    <legend>Вход към системата</legend>
+                    
+                    <labe>Потребителско име</labe><br>
+                    <input id="logUName" type="text" required><br>
+        
+                    <labe>Парола</labe><br>
+                    <input id="logPasswd" type="password" required><br>
+        
+                    <button type="button" id="log" onclick="login()">Изпрати</button>
+                    <span id="logStatus"></span>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <script src="log-reg-system.js"></script>
+</body>
+</html>

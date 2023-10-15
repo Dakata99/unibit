@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8”>
+
+<title>Моят първи уеб сайт с HTML и CSS</title>
+<link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+
+<link rel="stylesheet" href="sistem.css">
+</head>
+<body>
+<h1 class="tlt">Име и лого на сайта</h1>
+<br>
+
+<div id="navigation">
+	   <ul>
+	     <li><a href="index.html">За нас</a></li>
+	     <li><a href="page1.html" id="current">ГАЛЕРИЯ</a></li>
+	     </ul>
+	</div>
+
+<br>
+<h2>Добре дошли в моята първа уеб страница!</h2>
+
+  <h2>Галерия</h2>
+   <h3>Интересни места в страната</h3>
+   <br>
+   
+<div>
+<div class="gallery">
+  <a target="_blank" href="images/a.jpg">
+    <img src="images/a.jpg" alt="Cadiz" width="500" height="400">
+  </a>
+  <div class="desc">Кадис</div>
+</div>
+
+<div class="gallery">
+  <a target="_blank" href="images/b.jpg">
+    <img src="images/b.jpg" alt="Granada" width="600" height="400">
+  </a>
+  <div class="desc">Гранада</div>
+</div>
+
+<div class="gallery">
+  <a target="_blank" href="images/c.jpg">
+    <img src="images/c.jpg" alt="Valencia" width="600" height="400">
+  </a>
+  <div class="desc">Валенсия</div>
+</div>
+
+<div class="gallery">
+  <a target="_blank" href="images/d.jpg">
+    <img src="images/d.jpg" alt="Sea" width="600" height="400">
+  </a>
+  <div class="desc">Море</div>
+</div>
+
+<div class="gallery">
+  <a target="_blank" href="images/c.jpg">
+    <img src="images/e.jpg" alt="Barcelona" width="600" height="400">
+  </a>
+  <div class="desc">Барселона</div>
+</div>
+
+<div class="gallery">
+  <a target="_blank" href="images/f.jpg">
+    <img src="images/f.jpg" alt="Mills" width="600" height="400">
+  </a>
+  <div class="desc">Мелници</div>
+</div>
+
+<div class="gallery">
+  <a target="_blank" href="images/c.jpg">
+    <img src="images/g.jpg" alt="Segovia" width="600" height="400">
+  </a>
+  <div class="desc">Сеговия</div>
+</div>
+
+<div class="gallery">
+  <a target="_blank" href="images/f.jpg">
+    <img src="images/h.jpg" alt="Malaga" width="600" height="400">
+  </a>
+  <div class="desc">Малага</div>
+</div>
+<br>
+<br>
+
+<div class="gallery">
+  <a target="_blank" href="images/c.jpg">
+    <img src="images/g.jpg" alt="Segovia" width="600" height="400">
+  </a>
+  <div class="desc">Сеговия</div>
+</div>
+
+<div class="gallery">
+  <a target="_blank" href="images/f.jpg">
+    <img src="images/h.jpg" alt="Malaga" width="600" height="400">
+  </a>
+  <div class="desc">Малага</div>
+</div>
+
+<div class="gallery">
+  <a target="_blank" href="images/c.jpg">
+    <img src="images/g.jpg" alt="Segovia" width="600" height="400">
+  </a>
+  <div class="desc">Сеговия</div>
+</div>
+
+<div class="gallery">
+  <a target="_blank" href="images/f.jpg">
+    <img src="images/h.jpg" alt="Malaga" width="600" height="400">
+  </a>
+  <div class="desc">Малага</div>
+</div>
+</div>
+<br>
+
+<script>
+
+/*Current date script credit: 
+JavaScript Kit (www.javascriptkit.com)
+Over 200+ free scripts here!
+*/
+
+var mydate=new Date()
+var year=mydate.getYear()
+if (year < 1000)
+year+=1900
+var day=mydate.getDay()
+var month=mydate.getMonth()
+var daym=mydate.getDate()
+if (daym<10)
+daym="0"+daym
+var dayarray=new Array("Неделя","Понеделник","Вторник","Сряда","Thursday","Friday","Събота")
+var montharray=new Array("January","February","March","April","May","June","July","August","September","October","November","December")
+document.write("<small><font color='000000' face='Arial'><b>"+dayarray[day]+", "+montharray[month]+" "+daym+", "+year+"</b></font></small>")
+
+</script>
+
+</body>
+</html>

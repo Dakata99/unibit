@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        h1 {
+            text-align: center;
+        }
+        li {
+            display: inline;
+            margin-right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Допълнителни задачи (част 2)</h1>
+        <h2 onclick="hClick()">Заглавие</h2>
+    </header>
+
+    <!-- TODO: modify text 
+    Задачата е малко неразбираема -->
+    <p onclick="modifyText()">Текст Текст Текст Текст Текст Текст Текст Текст</p>
+
+    <button type="button" onclick="changeText()">Button</button>
+    <p id="p1">Names</p>
+
+    <!-- TODO: collalpsable list, how? -->
+    <ul>
+        <li class="collapsable" onmouseover="collapse()">Menu
+            <ul>
+                <li>Menu 1</li>
+                <li>Menu 2</li>
+                <li>Menu 3</li>
+            </ul>
+        </li>
+    </ul>
+
+    <script src="tasks.js"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 4</title>
+</head>
+<body>
+    <h2>String methods</h2>
+    <!-- TODO: better examples -->
+    <form name="concat-name" oninput="concat()">
+        First name: <input id="first-name" type="text">
+        Last name: <input  id="last-name" type="text">
+        Name: <output id="whole-name"></output>
+    </form>
+
+    <hr>
+    
+    <form name="text-area" oninput="split()">
+        Insert some text:<br>
+        <textarea id="text-area"></textarea><br>
+        Output (get space-separated words): <output id="words"></output>
+    </form>
+
+    <hr>
+
+    <form oninput="modifyPhone()">
+        Enter phone number: <input id="phone-number" type="text" placeholder="Ex.: 0891234567" maxlength="10" minlength="10">
+        Output: <output id="result-phone"></output>
+    </form>
+
+    <h2>Array methods</h2>
+
+    <script>
+        function concat() {
+            let firstName = document.querySelector("#first-name").value;
+            let lastName = document.querySelector("#last-name").value;
+            document.getElementById("whole-name").innerHTML = firstName.concat(' ', lastName);
+        }
+
+        function split() {
+            let text = document.querySelector("#text-area");
+            document.getElementById("words").innerHTML = text.value.split(" ");
+        }
+    
+        function modifyPhone() {
+            let number = document.querySelector("#phone-number").value;
+
+            if (number.startsWith('0')) {
+                number = "+359 " + number.slice(1, 3) + " " + number.slice(3, 7) + " " + number.slice(7, 10);
+            }
+            document.getElementById("result-phone").innerHTML = number;
+        }
+    
+        function arrayMethods() {
+            let arr = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
+            arr = arr.reverse();
+
+            document.write("Original: " + arr + "<br>");
+            document.write("Shift: " + arr.shift() + "<br>");
+            document.write("After shift: " + arr + "<br>");
+            document.write("Unshift (returns new length): " + arr.unshift(100) + "<br>");
+            document.write("After unshift: " + arr + "<br>");
+
+            document.write("<hr>");
+
+            document.write(arr.join(", "))
+
+            document.write("<hr>")
+
+            document.write(arr.concat([ "A", "B", "C"]) + "<br>");
+        }
+        arrayMethods();
+    </script>
+</body>
+</html>

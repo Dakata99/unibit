@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 2</title>
+</head>
+<body>
+    <!-- Arithmetic calculator -->
+    <form id="arithmetic-calculator" oninput="calculator('arithmetic')">
+        A:
+        <input id="a" type="text" placeholder="Enter a number">
+        B:
+        <input id="b" type="text" placeholder="Enter a number">
+        <select id="arithmetic-operation">
+            <option>+</option>
+            <option>-</option>
+            <option>*</option>
+            <option>**</option>
+            <option>/</option>
+            <option>%</option>
+            <!-- Inc/dec-rementing will work only on the first argument (aka A) -->
+            <option>++</option>
+            <option>--</option>
+        </select>
+        Result: <output id="result"></output>
+    </form>
+
+    <hr>
+    <!-- Comparison calculator -->
+    <form id="comparison-calculator" oninput="calculator('comparison')">
+        A:
+        <input id="a" type="text">
+        B:
+        <input id="b" type="text">
+        <select id="comparison-operation">
+            <option>==</option>
+            <option>===</option>
+            <option>!=</option>
+            <option>!==</option>
+            <option>&gt;</option>
+            <option>&lt;</option>
+            <option>>=</option>
+            <option>&lt;=</option>
+        </select>
+        Result: <output id="result"></output>
+    </form>
+
+    <script>
+        let operations = {
+            // -/ Arithmethic operators
+            "+": function(a, b) { return a + b; },
+            "-": function(a, b) { return a - b; },
+            "*": function(a, b) { return a * b; },
+            "**": function(a, b) { return a ** b; },
+            "/": function(a, b) { return a / b; }, // JS handles division by 0
+            "%": function(a, b) { return a % b; },
+            // --/ Inc/dec-rementing will work only on the first argument (aka A)
+            "++": function(a, b = 0) { return ++a; },
+            "--": function(a, b = 0) { return --a; },
+            // -/ Comparison operators
+            "==": function(a, b) { return a == b; },
+            "===": function(a, b) { return a === b; },
+            "!=": function(a, b) { return a != b; },
+            "!==": function(a, b) { return a !== b; },
+            ">": function(a, b) { return a > b; },
+            ">=": function(a, b) { return a >= b; },
+            "<": function(a, b) { return a < b; },
+            "<=": function(a, b) { return a <= b; }
+        }
+
+        function calculator(type) {
+            // Get the proper calculator form
+            let form = document.getElementById(type + "-calculator");
+
+            // Get the input's values
+            let a = null;
+            let b = null;
+            if (type == "arithmetic") {
+                a = Number(form.a.value);
+                b = Number(form.b.value);
+            } else { // type == "comparison"
+                a = form.a.value;
+                b = form.b.value;
+            }
+
+            // Get the operation
+            let op = document.getElementById(type + "-operation");
+
+            // Set the result
+            form.result.value = operations[op.value](a, b);
+        }
+    </script>
+</body>
+</html>

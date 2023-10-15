@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 1.4</title>
+</head>
+<body>
+
+    <h3 id="header0"></h3>
+    <h3 id="header1"></h3>
+    <h3 id="header2"></h3>
+    <h3 id="header3"></h3>
+    <h3 id="header4"></h3>
+
+    <button onclick="addTextToHeaderTags()">Add text to headers</button>
+
+    <script>
+        function addTextToHeaderTags() {
+            let idx = 0;
+            const headerId = "header";
+            let header = null;
+
+            while ((header = document.getElementById(headerId + idx)) != null) {
+                header.innerHTML = headerId.toUpperCase() + idx++;
+                header.style.color = "yellow";
+            }
+        }
+    </script>
+</body>
+</html>

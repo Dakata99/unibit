@@ -1,0 +1,49 @@
+h1 {
+    text-align: center;
+}
+
+hr {
+    border-top: 3px solid #000;
+}
+
+ul {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-left: 200px;
+    margin-right: 200px;
+}
+
+ul li {
+    background-color: grey;
+    width: 100px;
+    height: 40px;
+    right: 50px;
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+.page {
+    display: flex;
+    justify-self: space-between;
+    align-items: stretch;
+}
+
+.left-subpage {
+    flex: 1;
+    padding: 15px;
+}
+
+.left-subpage h3 {
+    text-align: center;
+}
+
+.right-subpage {
+    flex: 1;
+    padding: 15px;
+}
+
+.right-subpage h3 {
+    text-align: center;
+}

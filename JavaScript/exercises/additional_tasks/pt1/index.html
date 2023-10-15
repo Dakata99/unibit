@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h2>Допълнителни задачи (част 1)</h2>
+    </header>
+    <form>
+        <ol>
+            <li>
+                Намерете сумата на две числа!<br>
+                <input type="number" id="number1" onclick="clearValue1()"> + 
+                <input type="number" id="number2" onclick="clearValue2()"> = 
+                <input type="number" id="result" onmouseover="sum()">
+            </li>
+            <li>
+                Посочете вярното твърдение! Коя е текущата версия на HTML?<br>
+                <input type="radio" name="html_version" value="true">
+                5
+                <input type="radio" name="html_version" value="false">
+                4<br>
+                <button type="button" onclick="checkAnswer()">Отговорът е:</button>
+            </li>
+            <li>
+                Списъчно поле с повече от един избор (Ctrl + mouse click):<br>
+                <select id="options" onclick="checkSelectedOptions()" multiple>
+                    <option value="opt1" >Опция 1</option>
+                    <option value="opt2" >Опция 2</option>
+                    <option value="opt3" >Опция 3</option>
+                    <option value="opt4" >Опция 4</option>
+                    <option value="opt5" >Опция 5</option>
+                    <option value="opt6" >Опция 6</option>
+                </select>
+            </li>
+            <li>
+                Изберете checkbox:<br>
+                <input type="checkbox" name="checkbox" value="Номер 1">
+                Номер 1
+                <input type="checkbox" name="checkbox" value="Номер 2">
+                Номер 2
+                <input type="checkbox" name="checkbox" value="Номер 3">
+                Номер 3
+                <input type="checkbox" name="checkbox" value="Номер 4">
+                Номер 4<br>
+                <button type="button" onclick="checkCheckboxes()">Вашите избори</button>
+            </li>
+            <li>
+                Прикачете файл:
+                <input type="file" id="fileInput" onchange="checkFileUpload()">
+            </li>
+        </ol>
+    </form>
+    <script src="tasks.js"></script>
+</body>
+</html>
