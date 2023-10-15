@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <title>Task 6</title>
+</head>
+
+<body>
+    <p>
+        Brief description:
+    <ul>
+        <li>about: to-do list</li>
+        <li>parameters:</li>
+        <ul>
+            <li>topic: unique name identificator (since there is no sense in doing the same task twice
+                - if its done, delete it, and re-create it if needed to do it again, otherwise its not done)
+            </li>
+            <li>description: text about the topic (can be empty)</li>
+            <li>status: Open, In progress, Done</li>
+            <li>priority: Low, Medium, High </li>
+        </ul>
+    </ul>
+    </p>
+
+    <div class="control-panel">
+        <form>
+            <fieldset>
+                <legend>TO-DO list</legend>
+                <table>
+                    <tr>
+                        <td>Topic:</td>
+                        <td><input id="topic" type="text" placeholder="Provide a unique name"></td>
+                    </tr>
+                    <tr>
+                        <td>Description:</td>
+                        <td><textarea id="description"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>Status</td>
+                        <td>
+                            <select id="status">
+                                <option>Open</option>
+                                <option>In progress</option>
+                                <option>Done</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Priority</td>
+                        <td>
+                            <select id="priority">
+                                <option>Low</option>
+                                <option>Medium</option>
+                                <option>High</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><button id="createBtn" type="button" onclick="createTask()" disabled>Create</button></td>
+                        <td><button id="modifyBtn" type="button" onclick="modifyTask()" disabled>Modify</button></td>
+                    </tr>
+                </table>
+            </fieldset>
+        </form>
+    </div>
+
+    <hr>
+
+    <div id="list-container"></div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
