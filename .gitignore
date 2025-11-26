@@ -1,1 +1,8 @@
 OUP/exercises/info.txt
+.vscode
+CourseWork/build
+CourseWork/.dl
+CourseWork/.vscode
+CourseWork/dl_tool.egg-info
+CourseWork/tests
+CourseWork/scripts/__pycache__

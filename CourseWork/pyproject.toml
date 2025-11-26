@@ -1,0 +1,16 @@
+[project]
+name = "dl-tool"
+version = "0.1.0"
+
+[project.scripts]
+dl = "scripts.dl:main"
+train = "scripts.train:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["scripts"]
+
+[tool.black]
+line-length = 100
+
+# TODO: ruff rules

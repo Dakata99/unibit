@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# TODO: resolve the path issue (having spaces)
+# ROOT_DIR="$(realpath $(dirname $BASH_SOURCE))"
+ROOT_DIR=.
+VENV=dl
+VENV_ROOT_DIR=$ROOT_DIR/.$VENV
+
+# Create a Deep Learing virtual environment
+echo "[INFO] Creating Python virtual environment: $VENV"
+python -m venv --prompt $VENV $VENV_ROOT_DIR
+
+# Activate the venv
+source "$VENV_ROOT_DIR/bin/activate"
+
+# Update core packaging tools inside the venv
+python -m pip install --upgrade pip setuptools wheel
+
+# Install dependencies
+echo "[INFO] Installing Python dependencies: '$ROOT_DIR/requirements.txt'"
+pip install -r $ROOT_DIR/requirements.txt
+pip install -e $ROOT_DIR
