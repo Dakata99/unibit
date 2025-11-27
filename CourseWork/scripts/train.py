@@ -88,13 +88,13 @@ def train(epochs: int, batch_size: int, convert: bool = False):
 
     # 4) Encode labels to integers
     le = LabelEncoder()
-    y_int = le.fit_transform(y_raw)
+    y = le.fit_transform(y_raw)
     num_classes = len(le.classes_)
     log.debug("Classes: ", le.classes_)
 
     # 5) Train/validation split
     x_train, x_val, y_train_int, y_val_int = train_test_split(
-        x, y_int, test_size=0.2, stratify=y_int, random_state=42
+        x, y, test_size=0.2, stratify=y, random_state=42
     )
 
     # 6) Impute only chosen FEATURES - fit on training, apply to val
