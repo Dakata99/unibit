@@ -1,5 +1,6 @@
 import json
 import argparse
+import numpy as np
 import pandas as pd
 from pathlib import Path
 import tensorflow as tf
@@ -13,11 +14,12 @@ from scripts import mylogging as log
 ORGFILE = "data/hcv+data (original)/hcvdat0.csv"
 TARGET = "Category"
 FEATURES = ["AST", "CHE", "ALT", "ALP", "GGT"]
-MODELSDIR = Path('models')
+MODELSDIR = Path("models")
 MODELNAME = f"hcv-{'-'.join(FEATURES)}"
 EPOCHS = 50
 BATCH_SIZE = 16
 OPTIMIZER = "adam"
+
 
 # FIXME: maybe fetch data directly instead of storing it? But how Orange will use it?
 def fetch_data():
@@ -26,13 +28,13 @@ def fetch_data():
     """
     from ucimlrepo import fetch_ucirepo
 
-    # fetch dataset 
+    # fetch dataset
     hcv_data = fetch_ucirepo(id=571)
 
     # Rename CGT to GGT
-    hcv_data['data']['original'].rename(columns={"CGT": "GGT"}, inplace=True)
+    hcv_data["data"]["original"].rename(columns={"CGT": "GGT"}, inplace=True)
 
-    return hcv_data['data']['original']
+    return hcv_data["data"]["original"]
 
 
 def plot(history):
@@ -75,6 +77,7 @@ def train(epochs: int, batch_size: int, convert: bool = False):
     # 1) Load data
     log.info(f"Loading file: {ORGFILE}")
     df = pd.read_csv(ORGFILE, na_values=["?"])
+    df = df.rename(columns={df.columns[0]: "ID"})
     # df = fetch_data()
     log.debug("Original data:\n", df)
     log.debug(f"Features: {FEATURES}")
@@ -100,8 +103,8 @@ def train(epochs: int, batch_size: int, convert: bool = False):
 
     # 6) Impute only chosen FEATURES - fit on training, apply to val
     imputer = SimpleImputer(strategy="mean")
-    x_train = imputer.fit_transform(x_train) # calculate the mean
-    x_val = imputer.transform(x_val) # apply the mean from above (no re-calculating)
+    x_train = imputer.fit_transform(x_train)  # calculate the mean
+    x_val = imputer.transform(x_val)  # apply the mean from above (no re-calculating)
 
     # Cast to float32 for TF
     x_train = x_train.astype("float32")
@@ -149,15 +152,64 @@ def train(epochs: int, batch_size: int, convert: bool = False):
     # 11.1) Create a plot of accuracy and loss over time
     plot(history)
 
-    # 11.2) TODO: some inference on new data???
-    # examples = tf.constant(
-    #     # "AST", "CHE", "ALT", "ALP", "GGT"
-    #     [35, 7200, 42, 110, 55] # U/L
-    # )
-    # prediction = model.predict(examples)
-    # log.debug(f'Prediction: {prediction}')
+    # 12) Inference on original data for sanity check
+    log.info('Testing model with samples from original data')
+    # 12.1) Pick 10 rows without NaN in the feature columns
+    subset = df.dropna(subset=FEATURES).sample(n=10)  # TIP: bump higher, like 100
 
-    # 12) Save Keras model to TFLite
+    # 12.2) Extract features for the model
+    x_sample = subset[FEATURES].to_numpy(dtype=np.float32)
+    x_sample = imputer.transform(x_sample)
+
+    # 12.3) Run the model
+    predictions = model.predict(x_sample)
+    max_idxs = np.argmax(predictions, axis=1)
+
+    # 12.4) Map indices → original diagnoses using the LabelEncoder
+    predicted_labels = le.inverse_transform(max_idxs)
+
+    # 12.5) Get the true labels and IDs from the same rows
+    actual_labels = subset["Category"].to_numpy()
+    ids = subset["ID"].to_numpy()
+
+    # 12.6) Print everything together
+    # Disables scientific notation
+    np.set_printoptions(suppress=True)
+    correct = 0
+    for row_id, actual, predicted, probabilities in zip(
+        ids, actual_labels, predicted_labels, predictions
+    ):
+        is_correct = actual == predicted
+        if is_correct:
+            correct += 1
+        log.debug(
+            f"ID: {row_id}, actual: {actual}, predicted: {predicted}, probabilities: {probabilities}"
+        )
+
+    log.debug(f"Total correctly predicted: {correct}")
+
+    # 12.7) Synthetic data
+    synthetic_data = np.array(
+        [
+            [23.4, 7.8, 18.2, 65.1, 72.0],
+            [31.7, 9.5, 25.6, 70.3, 80.4],
+            [19.8, 6.9, 15.3, 55.2, 68.7],
+            [42.1, 8.2, 33.9, 82.7, 95.5],
+            [27.5, 10.1, 22.4, 60.8, 74.3],
+            [35.9, 7.4, 29.7, 77.6, 88.1],
+            [21.2, 8.7, 17.9, 63.4, 70.9],
+            [46.3, 9.9, 38.5, 85.2, 102.6],
+            [25.6, 7.1, 20.8, 58.9, 73.2],
+            [33.8, 8.5, 27.1, 72.4, 84.7],
+        ]
+    )
+    log.info('Testing model with new "synthetic" data')
+    predictions = model.predict(synthetic_data)
+    for p in predictions:
+        max_idx = np.argmax(p)
+        log.debug(f"Prediction: {le.inverse_transform([max_idx])[0]}, probabilities: {p}")
+
+    # 13) Save Keras model to TFLite
     if convert:
         # Dump results to a file
         modelname = f"{MODELSDIR}/{MODELNAME}.tflite"
