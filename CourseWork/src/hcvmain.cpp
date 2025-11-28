@@ -30,11 +30,11 @@ struct BioMetric {
 };
 
 std::vector<BioMetric> biometrics = {
-    BioMetric("AST"),
-    BioMetric("CHE"),
-    BioMetric("ALT"),
-    BioMetric("ALP"),
-    BioMetric("GGT"),
+    BioMetric("AST", 0.0, "Aspartate transaminase"),
+    BioMetric("CHE", 0.0, "Cholinesterase"),
+    BioMetric("ALT", 0.0, "Alanine transaminase"),
+    BioMetric("ALP", 0.0, "Alkaline phosphatase"),
+    BioMetric("GGT", 0.0, "Gamma-glutamyltransferase"),
 };
 
 std::vector<std::pair<std::string, std::string>> conditions = {
@@ -51,8 +51,7 @@ void printModelInfo(const tflite::Interpreter& interpreter);
 int main(int argc, char* argv[]) {
     spdlog::set_pattern("[%^%l%$] %v");
 
-    // TODO: description
-    args::ArgumentParser parser("HCV - TODO: description");
+    args::ArgumentParser parser("HCV - monitoring assistant");
     args::HelpFlag help(parser, "help", "Display help", {'h', "help"});
 
     args::Group logging(parser, "Logging options", args::Group::Validators::DontCare);
@@ -62,11 +61,11 @@ int main(int argc, char* argv[]) {
     args::Positional<std::string> nnmodel(input, "model", "TFLite model to load");
 
     // TODO: make these dynamic, based on the metrics???
-    args::ValueFlag<float> metric1(input, biometrics[0].shortname, biometrics[0].description, {biometrics[0].shortname});
-    args::ValueFlag<float> metric2(input, biometrics[1].shortname, biometrics[1].description, {biometrics[1].shortname});
-    args::ValueFlag<float> metric3(input, biometrics[2].shortname, biometrics[2].description, {biometrics[2].shortname});
-    args::ValueFlag<float> metric4(input, biometrics[3].shortname, biometrics[3].description, {biometrics[3].shortname});
-    args::ValueFlag<float> metric5(input, biometrics[4].shortname, biometrics[4].description, {biometrics[4].shortname});
+    args::ValueFlag<float> metric1(input, biometrics[0].shortname, biometrics[0].name, {biometrics[0].shortname});
+    args::ValueFlag<float> metric2(input, biometrics[1].shortname, biometrics[1].name, {biometrics[1].shortname});
+    args::ValueFlag<float> metric3(input, biometrics[2].shortname, biometrics[2].name, {biometrics[2].shortname});
+    args::ValueFlag<float> metric4(input, biometrics[3].shortname, biometrics[3].name, {biometrics[3].shortname});
+    args::ValueFlag<float> metric5(input, biometrics[4].shortname, biometrics[4].name, {biometrics[4].shortname});
 
     try {
         parser.ParseCLI(argc, argv);

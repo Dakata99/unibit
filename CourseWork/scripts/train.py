@@ -77,7 +77,8 @@ def train(epochs: int, batch_size: int, convert: bool = False):
     df = pd.read_csv(ORGFILE, na_values=["?"])
     # df = fetch_data()
     log.debug("Original data:\n", df)
-    log.debug("Summary of missing values (features: ):\n", FEATURES, df.isna().sum())
+    log.debug(f"Features: {FEATURES}")
+    log.debug(f"Summary of missing values:\n{df.isna().sum()}")
 
     # 2) Sanity check: drop rows with missing Category value
     df = df.dropna(subset=[TARGET])
@@ -93,28 +94,28 @@ def train(epochs: int, batch_size: int, convert: bool = False):
     log.debug("Classes: ", le.classes_)
 
     # 5) Train/validation split
-    x_train, x_val, y_train_int, y_val_int = train_test_split(
+    x_train, x_val, y_train, y_val = train_test_split(
         x, y, test_size=0.2, stratify=y, random_state=42
     )
 
     # 6) Impute only chosen FEATURES - fit on training, apply to val
     imputer = SimpleImputer(strategy="mean")
-    x_train = imputer.fit_transform(x_train)
-    x_val = imputer.transform(x_val)
+    x_train = imputer.fit_transform(x_train) # calculate the mean
+    x_val = imputer.transform(x_val) # apply the mean from above (no re-calculating)
 
     # Cast to float32 for TF
     x_train = x_train.astype("float32")
     x_val = x_val.astype("float32")
 
     # 7) One-hot labels for Keras
-    y_train = tf.keras.utils.to_categorical(y_train_int, num_classes=num_classes)
-    y_val = tf.keras.utils.to_categorical(y_val_int, num_classes=num_classes)
+    y_train = tf.keras.utils.to_categorical(y_train, num_classes=num_classes)
+    y_val = tf.keras.utils.to_categorical(y_val, num_classes=num_classes)
 
     # 8) Normalization layer — learn mean/std from TRAINING data only
     norm = tf.keras.layers.Normalization(axis=-1)
     norm.adapt(x_train)
 
-    # 10) Construct small MLP
+    # 9) Construct small MLP
     inputs = tf.keras.Input(shape=(len(FEATURES),), dtype=tf.float32)
     x = norm(inputs)
     x = tf.keras.layers.Dense(16, activation="relu")(x)
@@ -139,8 +140,8 @@ def train(epochs: int, batch_size: int, convert: bool = False):
     )
 
     # 11) Evaluate the model
-    # loss - a number which represents our error, lower values are better
     log.info("Evaluating model...")
+    # loss - a number which represents our error, lower values are better
     loss, accuracy = model.evaluate(x_val, y_val)
     log.info(f"Loss: {loss}")
     log.info(f"Accuracy: {accuracy}")
