@@ -1,0 +1,20 @@
+[project]
+name = "unibit"
+version = "0.1.0"
+description = "University courses"
+readme = "README.md"
+requires-python = ">=3.12"
+
+[dependency-groups]
+dev = [
+    "devtools[docs]",
+]
+
+[tool.uv.sources]
+devtools = { git = "https://github.com/Dakata99/devtools.git", rev = "main" }
+
+# TODO: figure out how to use this
+[tool.ruff]
+exclude = [
+    "CourseWork/third_party/",
+]

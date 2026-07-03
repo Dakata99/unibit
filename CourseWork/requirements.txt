@@ -1,0 +1,9 @@
+pandas
+tensorflow
+scikit-learn
+matplotlib
+plumbum
+ucimlrepo
+black # Formatter (optional)
+ruff # Linter (optional)
+kagglehub
