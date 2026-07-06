@@ -48,11 +48,10 @@ jobs:
 
       - name: Run application
         run: |
-          cd CourseWork
           source setupenv
-          hcv configure
-          hcv build
-          hcv run \
+          uv run --package hcv-tool hcv configure
+          uv run --package hcv-tool hcv build
+          uv run --package hcv-tool hcv run \
             --AST 1 \
             --CHE 2 \
             --ALP 3 \
