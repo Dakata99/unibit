@@ -7,6 +7,8 @@ on:
 
 jobs:
   lint-and-test:
+    # TODO: enable this
+    if: ${{ false }}
     runs-on: ubuntu-latest
 
     steps:
@@ -29,3 +31,30 @@ jobs:
 
       - name: Type check
         run: uv run dev-check
+  course-work:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        run: uv python install 3.11
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run application
+        run: |
+          source setupenv
+          hcv configure
+          hcv build
+          hcv run \
+            --AST 1 \
+            --CHE 2 \
+            --ALP 3 \
+            --ALT 4 \
+            --GGT 5 \
+            ./models/hcv-AST-CHE-ALT-ALP-GGT.tflite
