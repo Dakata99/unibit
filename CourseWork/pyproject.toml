@@ -1,14 +1,49 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "dl-tool"
+name = "hcv-tool"
 version = "0.1.0"
+description = "Add a short description of your project here"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+keywords = ["python", "template", "machine-learning"]
+dependencies = [
+    "pandas",
+    "tensorflow",
+    "scikit-learn",
+    "matplotlib",
+    "plumbum",
+    "ucimlrepo",
+    "kagglehub",
+    "argcomplete>=3.7.0",
+    "loguru>=0.7.3",
+]
+
+[project.urls]
+Repository = "https://github.com/Dakata99/unibit/"
+Issues = "https://github.com/Dakata99/unibit/issues"
+Documentation = "https://dakata99.github.io/unibit/"
 
 [project.scripts]
-dl = "scripts.dl:main"
+hcv = "scripts.cli:main"
 train = "scripts.train:main"
+
+[tool.setuptools]
+include-package-data = true
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["scripts"]
 
-[tool.black]
-line-length = 100
+[tool.coverage.run]
+branch = true
+source = ["scripts"]
+
+[tool.uv.sources]
+devtools = { git = "https://github.com/Dakata99/devtools.git" }
+
+[dependency-groups]
+dev = ["devtools"]

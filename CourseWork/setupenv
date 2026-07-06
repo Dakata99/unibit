@@ -1,22 +1,20 @@
 #!/bin/bash
 
-# TODO: resolve the path issue (having spaces)
-# ROOT_DIR="$(realpath $(dirname $BASH_SOURCE))"
-ROOT_DIR=.
-VENV=dl
-VENV_ROOT_DIR=$ROOT_DIR/.$VENV
+set -euo pipefail
 
-# Create a Deep Learing virtual environment
-echo "[INFO] Creating Python virtual environment: $VENV"
-python -m venv --prompt $VENV $VENV_ROOT_DIR
+if [[ $(which uv) == "" ]]; then
+    echo "[ERROR] uv is not installed. Please install uv first."
+    echo "[INFO] Command: curl -LsSf https://astral.sh/uv/install.sh | sh"
+    exit 1
+fi
 
-# Activate the venv
-source "$VENV_ROOT_DIR/bin/activate"
+export UNIBIT_CW_ROOT="$(realpath $(dirname $BASH_SOURCE))"
+PROMPT=hcv
 
-# Update core packaging tools inside the venv
-python -m pip install --upgrade pip setuptools wheel
+export UV_PROJECT_ENVIRONMENT=.$PROMPT
+uv venv $UV_PROJECT_ENVIRONMENT --prompt $PROMPT --clear
+source $UV_PROJECT_ENVIRONMENT/bin/activate
+uv sync --active --quiet
 
-# Install dependencies
-echo "[INFO] Installing Python dependencies: '$ROOT_DIR/requirements.txt'"
-pip install -r $ROOT_DIR/requirements.txt
-pip install -e $ROOT_DIR
+# Enable command-line autocompletion for the `liver` command.
+eval "$(register-python-argcomplete hcv)"
