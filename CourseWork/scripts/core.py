@@ -4,10 +4,11 @@ import os
 from pathlib import Path
 from loguru import logger
 
-cmake = local["cmake"]
-CMAKE_BUILD_DIR: str = "build"
+CW_ROOT: Path = Path(os.getenv("UNIBIT_CW_ROOT"))
 
-CW_ROOT: Path = os.getenv("UNIBIT_CW_ROOT")
+cmake = local["cmake"]
+CMAKE_BUILD_DIR: Path = CW_ROOT / 'build'
+
 
 def configure(*args) -> None:
     logger.info("Configuring CMake project")
@@ -29,7 +30,7 @@ def build(*args) -> None:
 def run(args):
     logger.info("Running C++ application")
 
-    hcvmain = local[f"{CW_ROOT}/build/hcvmain"]
+    hcvmain = local[f"{CMAKE_BUILD_DIR}/hcvmain"]
     clargs = [
         f"--AST={args.AST}",
         f"--CHE={args.CHE}",

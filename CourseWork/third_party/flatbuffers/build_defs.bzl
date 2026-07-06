@@ -1,1 +1,0 @@
-/home/dlyubenov/tensorflow/tensorflow/third_party/flatbuffers/build_defs.bzl

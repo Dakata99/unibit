@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -euo pipefail
-
 if [[ $(which uv) == "" ]]; then
     echo "[ERROR] uv is not installed. Please install uv first."
     echo "[INFO] Command: curl -LsSf https://astral.sh/uv/install.sh | sh"
