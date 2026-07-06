@@ -48,6 +48,7 @@ jobs:
 
       - name: Run application
         run: |
+          cd CourseWork
           source setupenv
           hcv configure
           hcv build
