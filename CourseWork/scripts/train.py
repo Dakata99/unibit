@@ -1,5 +1,4 @@
 import json
-import argparse
 import numpy as np
 import pandas as pd
 from pathlib import Path
@@ -8,16 +7,14 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.impute import SimpleImputer
+from loguru import logger
+from .core import CW_ROOT
 
-from scripts.log import log
-
-ORGFILE = "data/hcv+data (original)/hcvdat0.csv"
+ORGFILE: Path = CW_ROOT / "data/hcv+data (original)/hcvdat0.csv"
 TARGET = "Category"
 FEATURES = ["AST", "CHE", "ALT", "ALP", "GGT"]
-MODELSDIR = Path("models")
+MODELSDIR: Path = CW_ROOT / "models"
 MODELNAME = f"hcv-{'-'.join(FEATURES)}"
-EPOCHS = 50
-BATCH_SIZE = 16
 OPTIMIZER = "adam"
 
 
@@ -38,9 +35,9 @@ def fetch_data():
 
 
 def plot(history):
-    log.info("Generating plots...")
+    logger.info("Generating plots...")
     history_dict = history.history
-    log.debug(f"history: {history_dict.keys()}")
+    logger.debug(f"history: {history_dict.keys()}")
 
     loss = history_dict["loss"]
     accuracy = history_dict["accuracy"]
@@ -70,18 +67,48 @@ def plot(history):
 
     plt.savefig(f"{MODELSDIR}/{MODELNAME}-train-val.png")
     plt.close()
-    log.info(f"Saved plot: `{MODELSDIR}/{MODELNAME}-train-val.png`")
+    logger.info(f"Saved plot: `{MODELSDIR}/{MODELNAME}-train-val.png`")
+
+
+def convert_to_tflite(epochs, batch_size, loss, accuracy, model, history):
+    # Dump results to a file
+    modelname = f"{MODELSDIR}/{MODELNAME}.tflite"
+    results = {
+        "tf-version": tf.__version__,
+        "model": modelname,
+        "epochs": epochs,
+        "batch-size": batch_size,
+        "optimizer": OPTIMIZER,
+        "loss": loss,
+        "accuracy": accuracy,
+        "history": {
+            "training-loss": history.history["loss"],
+            "training-accuracy": history.history["accuracy"],
+            "validation-loss": history.history["val_loss"],
+            "validation-accuracy": history.history["val_accuracy"],
+        },
+    }
+
+    with open(f"{MODELSDIR}/{MODELNAME}-report.json", "w") as fd:
+        json.dump(results, fd, indent=4)
+
+    # Convert model to TFLite
+    converter = tf.lite.TFLiteConverter.from_keras_model(model)
+    tflite_model = converter.convert()
+    with open(modelname, "wb") as fd:
+        fd.write(tflite_model)
+    logger.info(f"Saved TFLite model to `{modelname}`")
 
 
 def train(epochs: int, batch_size: int, convert: bool = False):
     # 1) Load data
-    log.info(f"Loading file: {ORGFILE}")
+    logger.info(f"Loading file: {ORGFILE}")
     df = pd.read_csv(ORGFILE, na_values=["?"])
     df = df.rename(columns={df.columns[0]: "ID"})
     # df = fetch_data()
-    log.debug("Original data:\n", df)
-    log.debug(f"Features: {FEATURES}")
-    log.debug(f"Summary of missing values:\n{df.isna().sum()}")
+    logger.debug("Original data:\n", df)
+    logger.debug(f"Features: {FEATURES}")
+    logger.debug(f"Summary of missing values:\n{df.isna().sum()}")
 
     # 2) Sanity check: drop rows with missing Category value
     df = df.dropna(subset=[TARGET])
@@ -94,7 +121,7 @@ def train(epochs: int, batch_size: int, convert: bool = False):
     le = LabelEncoder()
     y = le.fit_transform(y_raw)
     num_classes = len(le.classes_)
-    log.debug(f"Classes: {le.classes_}")
+    logger.debug(f"Classes: {le.classes_}")
 
     # 5) Train/validation split
     x_train, x_val, y_train, y_val = train_test_split(
@@ -128,11 +155,11 @@ def train(epochs: int, batch_size: int, convert: bool = False):
     model = tf.keras.Model(inputs, outputs)
     model.compile(optimizer=OPTIMIZER, loss="categorical_crossentropy", metrics=["accuracy"])
 
-    log.info("Model summary:\n")
+    logger.info("Model summary:\n")
     model.summary()
 
     # 10) Train
-    log.info("Training model...")
+    logger.info("Training model...")
     history = model.fit(
         x_train,
         y_train,
@@ -143,17 +170,17 @@ def train(epochs: int, batch_size: int, convert: bool = False):
     )
 
     # 11) Evaluate the model
-    log.info("Evaluating model...")
+    logger.info("Evaluating model...")
     # loss - a number which represents our error, lower values are better
     loss, accuracy = model.evaluate(x_val, y_val)
-    log.info(f"Loss: {loss}")
-    log.info(f"Accuracy: {accuracy}")
+    logger.info(f"Loss: {loss}")
+    logger.info(f"Accuracy: {accuracy}")
 
     # 11.1) Create a plot of accuracy and loss over time
     plot(history)
 
     # 12) Inference on original data for sanity check
-    log.info('Testing model with samples from original data')
+    logger.info('Testing model with samples from original data')
     # 12.1) Pick 10 rows without NaN in the feature columns
     subset = df.dropna(subset=FEATURES).sample(n=10)  # TIP: bump higher, like 100
 
@@ -182,11 +209,11 @@ def train(epochs: int, batch_size: int, convert: bool = False):
         is_correct = actual == predicted
         if is_correct:
             correct += 1
-        log.debug(
+        logger.debug(
             f"ID: {row_id}, actual: {actual}, predicted: {predicted}, probabilities: {probabilities}"
         )
 
-    log.debug(f"Total correctly predicted: {correct}")
+    logger.debug(f"Total correctly predicted: {correct}")
 
     # 12.7) Synthetic data
     synthetic_data = np.array(
@@ -203,59 +230,22 @@ def train(epochs: int, batch_size: int, convert: bool = False):
             [33.8, 8.5, 27.1, 72.4, 84.7],
         ]
     )
-    log.info('Testing model with new "synthetic" data')
+    logger.info('Testing model with new "synthetic" data')
     predictions = model.predict(synthetic_data)
     for p in predictions:
         max_idx = np.argmax(p)
-        log.debug(f"Prediction: {le.inverse_transform([max_idx])[0]}, probabilities: {p}")
+        logger.debug(f"Prediction: {le.inverse_transform([max_idx])[0]}, probabilities: {p}")
 
     # 13) Save Keras model to TFLite
     if convert:
-        # Dump results to a file
-        modelname = f"{MODELSDIR}/{MODELNAME}.tflite"
-        results = {
-            "tf-version": tf.__version__,
-            "model": modelname,
-            "epochs": epochs,
-            "batch-size": batch_size,
-            "optimizer": OPTIMIZER,
-            "loss": loss,
-            "accuracy": accuracy,
-            "history": {
-                "training-loss": history.history["loss"],
-                "training-accuracy": history.history["accuracy"],
-                "validation-loss": history.history["val_loss"],
-                "validation-accuracy": history.history["val_accuracy"],
-            },
-        }
-
-        with open(f"{MODELSDIR}/{MODELNAME}-report.json", "w") as fd:
-            json.dump(results, fd, indent=4)
-
-        converter = tf.lite.TFLiteConverter.from_keras_model(model)
-        tflite_model = converter.convert()
-        with open(modelname, "wb") as f:
-            f.write(tflite_model)
-        log.info(f"Saved TFLite model to `{modelname}`")
+        convert_to_tflite(epochs, batch_size, loss, accuracy, model, history)
 
 
-def main():
-    parser = argparse.ArgumentParser(prog="train")
-    parser.add_argument(
-        "--epochs", type=int, default=EPOCHS, help="Number of epochs to train the model"
-    )
-    parser.add_argument("--batch-size", type=int, default=BATCH_SIZE, help="Batch size")
-    parser.add_argument("--convert", action="store_true", help="Convert model to TFLite")
-    args = parser.parse_args()
-
+def main(epochs: int, batch_size: int, convert: bool = False):
     # Setup
     if not MODELSDIR.exists():
         MODELSDIR.mkdir(exist_ok=True)
 
     # Start training
-    log.info(f"Tensorflow version: {tf.__version__}")
-    train(args.epochs, args.batch_size, args.convert)
-
-
-if __name__ == "__main__":
-    main()
+    logger.info(f"Tensorflow version: {tf.__version__}")
+    train(epochs, batch_size, convert)

@@ -48,10 +48,13 @@ jobs:
 
       - name: Run application
         run: |
+          export UNIBIT_DEBUG
+
           source setupenv
-          uv run --package hcv-tool hcv configure
-          uv run --package hcv-tool hcv build
-          uv run --package hcv-tool hcv run \
+          uv run --package hcv-tool hcv --debug configure
+          uv run --package hcv-tool hcv --debug build
+          # TODO: use proper values for the biometrics
+          uv run --package hcv-tool hcv --debug run \
             --AST 1 \
             --CHE 2 \
             --ALP 3 \

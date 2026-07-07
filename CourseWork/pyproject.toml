@@ -22,11 +22,6 @@ dependencies = [
     "loguru>=0.7.3",
 ]
 
-[project.urls]
-Repository = "https://github.com/Dakata99/unibit/"
-Issues = "https://github.com/Dakata99/unibit/issues"
-Documentation = "https://dakata99.github.io/unibit/"
-
 [project.scripts]
 hcv = "scripts.cli:main"
 train = "scripts.train:main"

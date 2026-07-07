@@ -6,9 +6,7 @@ if [[ $(which uv) == "" ]]; then
     exit 1
 fi
 
-export UNIBIT_CW_ROOT="$(realpath $(dirname $BASH_SOURCE))"
 PROMPT=hcv
-
 export UV_PROJECT_ENVIRONMENT=.$PROMPT
 uv venv $UV_PROJECT_ENVIRONMENT --prompt $PROMPT --clear
 source $UV_PROJECT_ENVIRONMENT/bin/activate
@@ -16,3 +14,5 @@ uv sync --active --quiet
 
 # Enable command-line autocompletion for the `liver` command.
 eval "$(register-python-argcomplete hcv)"
+
+export UNIBIT_CW_ROOT=$(git rev-parse --show-toplevel)/CourseWork
