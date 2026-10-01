@@ -6,10 +6,6 @@ if [[ $(which uv) == "" ]]; then
     exit 1
 fi
 
-PROMPT=unibit
-export UV_PROJECT_ENVIRONMENT=.$PROMPT
-uv venv $UV_PROJECT_ENVIRONMENT --prompt $PROMPT --clear
-source $UV_PROJECT_ENVIRONMENT/bin/activate
 uv sync --active --quiet
 
 export UNIBIT_ROOT=$(git rev-parse --show-toplevel)

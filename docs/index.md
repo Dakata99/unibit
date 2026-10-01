@@ -1,5 +1,5 @@
-# УниБИТ (UniBIT)
+# University of Library Studies and Information Technologies (UniBIT)
 
-## 4-ти курс (4th grade)
-  - Курсова работа (Course work)
-  - Дипломна работа (Diploma)
+## 4th grade
+  - Course work
+  - Diploma

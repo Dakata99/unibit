@@ -1,3 +1,3 @@
-# Дипломна работа (Diploma)
+# Diploma
 
-Проект: [Liver Disease Classification](https://github.com/Dakata99/ldc)
+Project: [Liver Disease Classification](https://github.com/Dakata99/ldc)

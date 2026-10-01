@@ -1,3 +1,4 @@
-# Генеративен изкуствен интелект (Generative Artifical Intelligence)
+# Generative Artifical Intelligence
 
-Project: [bank-statement-OCR-tool](https://github.com/Dakata99/bank-statement-OCR-tool)
+Project: bank-statement-OCR-tool
+Check [README.md](../../gai/README.md) how to run the app.
