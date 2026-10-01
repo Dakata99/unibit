@@ -61,4 +61,4 @@ jobs:
             --ALP 3 \
             --ALT 4 \
             --GGT 5 \
-            $(UNIBIT_ROOT)/CourseWork/models/hcv-AST-CHE-ALT-ALP-GGT.tflite
+            ${UNIBIT_ROOT}/CourseWork/models/hcv-AST-CHE-ALT-ALP-GGT.tflite
