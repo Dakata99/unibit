@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
-import glob
 import argparse
+import glob
+from pathlib import Path
+from typing import Any
+
 import kagglehub
 import pandas as pd
-from pathlib import Path
 
 TOPICS = [
     # {
@@ -16,65 +18,67 @@ TOPICS = [
         # NO!
         "website": "kaggle",
         "dataset": "mdrakiburrahman10/hepatitis-c-virus-hcv-for-egyptian-patients",
-        "file": "Discretization-Criteria.csv"
+        "file": "Discretization-Criteria.csv",
     },
-    {   # POSSIBLE!
+    {  # POSSIBLE!
         "website": "kaggle",
         "dataset": "paramjeetsinghds/indian-liver-disease-dataset",
-        "file": "Training_indian_liver_disease_dataset.csv"
+        "file": "Training_indian_liver_disease_dataset.csv",
     },
     {
         "website": "kaggle",
         "dataset": "utkarshx27/non-alcohol-fatty-liver-disease",
         "file": None,
-    }
+    },
 ]
 
-def download(dataset: str):
+
+def download(dataset: str) -> Any:
     # Download latest version
     path = kagglehub.dataset_download(dataset)
     print("Dataset downloaded to:", path)
     return path
 
-def info(path: Path, file: Path):
+
+def info(path: Path, file: Path) -> None:
     # Load the CSV (adjust the filename if needed)
     if file is None:
         csv_files = glob.glob(str(Path(path) / "*.csv"))
     else:
-        csv_files = [ Path(path) / file ]
+        csv_files = [Path(path) / file]
 
     for csv_file in csv_files:
-        print(f'------------------------- {Path(csv_file).name} -------------------------')
+        print(
+            f"------------------------- {Path(csv_file).name} -------------------------"
+        )
         df = pd.read_csv(Path(path) / csv_file)
-        print('------------------------- HEAD -------------------------')
+        print("------------------------- HEAD -------------------------")
         print(df.head())
-        print('------------------------- INFO -------------------------')
+        print("------------------------- INFO -------------------------")
         print(df.info())
-        print('------------------------- FEATURES -------------------------')
+        print("------------------------- FEATURES -------------------------")
         print(df.columns)
-        print('------------------------- DATASET -------------------------')
+        print("------------------------- DATASET -------------------------")
         print(df)
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(prog="research")
     parser.add_argument("--index", type=int, help="Dataset index to check")
-    parser.add_argument("--print", action='store_true', help="Print list of datasets")
+    parser.add_argument("--print", action="store_true", help="Print list of datasets")
     args = parser.parse_args()
 
     if args.print:
         for topic in TOPICS:
             idx = 0
-            print(
-                f"Index: {idx}\n"
-                f"\t{TOPICS[idx]}"
-            )
+            print(f"Index: {idx}\n\t{TOPICS[idx]}")
             idx += 1
     elif args.index is not None:
         assert args.index > -1 and args.index < len(TOPICS), "Not a valid index"
         topic = TOPICS[args.index]
-        path = download(topic['dataset'])
-        info(path, topic['file'])
+        path = download(topic["dataset"])
+        info(path, topic["file"])
+
 
 if __name__ == "__main__":
     main()

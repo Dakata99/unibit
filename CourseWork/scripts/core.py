@@ -1,37 +1,33 @@
-
-from plumbum import local
 import os
 from pathlib import Path
-from loguru import logger
 
-CW_ROOT: Path = Path(os.getenv("UNIBIT_CW_ROOT") or f'{os.getenv("UNIBIT_ROOT")}/CourseWork')
+from loguru import logger
+from plumbum import local
+
+CW_ROOT: Path = Path(
+    os.getenv("UNIBIT_CW_ROOT") or f"{os.getenv('UNIBIT_ROOT')}/CourseWork"
+)
 
 cmake = local["cmake"]
-CMAKE_BUILD_DIR: Path = CW_ROOT / 'build'
-HCVMAIN: Path = CMAKE_BUILD_DIR / 'hcvmain'
+CMAKE_BUILD_DIR: Path = CW_ROOT / "build"
+HCVMAIN: Path = CMAKE_BUILD_DIR / "hcvmain"
 
 
 def configure(*args) -> None:
     logger.info("Configuring CMake project")
-    logger.debug(f'CMAKE_BUILD_DIR: {CMAKE_BUILD_DIR}')
-    cmake[
-        "-S", CW_ROOT,
-        "-G", "Ninja",
-        "-B", CMAKE_BUILD_DIR
-    ].run_fg()
+    logger.debug(f"CMAKE_BUILD_DIR: {CMAKE_BUILD_DIR}")
+    cmake["-S", CW_ROOT, "-G", "Ninja", "-B", CMAKE_BUILD_DIR].run_fg()
 
 
 def build(*args) -> None:
     logger.info("Building CMake project")
-    cmake[
-        "--build", CMAKE_BUILD_DIR
-    ].run_fg()
+    cmake["--build", CMAKE_BUILD_DIR].run_fg()
 
 
-def run(args):
+def run(args) -> None:
     logger.info("Running C++ application")
 
-    hcvmain = local[HCVMAIN]
+    hcvmain = local[str(HCVMAIN)]
     clargs = [
         f"--AST={args.AST}",
         f"--CHE={args.CHE}",

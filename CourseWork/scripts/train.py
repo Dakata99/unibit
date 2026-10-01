@@ -1,13 +1,16 @@
 import json
+from pathlib import Path
+from typing import Any
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from pathlib import Path
 import tensorflow as tf
-import matplotlib.pyplot as plt
+from loguru import logger
+from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-from sklearn.impute import SimpleImputer
-from loguru import logger
+
 from .core import CW_ROOT
 
 ORGFILE: Path = CW_ROOT / "data/hcv+data (original)/hcvdat0.csv"
@@ -19,7 +22,7 @@ OPTIMIZER = "adam"
 
 
 # FIXME: maybe fetch data directly instead of storing it? But how Orange will use it?
-def fetch_data():
+def fetch_data() -> Any:
     """
     Check https://archive.ics.uci.edu/dataset/571/hcv+data and click on 'IMPORT IN PYTHON'
     """
@@ -34,7 +37,7 @@ def fetch_data():
     return hcv_data["data"]["original"]
 
 
-def plot(history):
+def plot(history) -> None:
     logger.info("Generating plots...")
     history_dict = history.history
     logger.debug(f"history: {history_dict.keys()}")
@@ -47,7 +50,7 @@ def plot(history):
     epochs = range(1, len(accuracy) + 1)
 
     # Create a figure with 2 subplots
-    fig, (plot1, plot2) = plt.subplots(1, 2, figsize=(12, 5))  # 1 row, 2 colums
+    _, (plot1, plot2) = plt.subplots(1, 2, figsize=(12, 5))  # 1 row, 2 colums
 
     # Plot 1: training and validation loss
     plot1.plot(epochs, loss, "bo", label="Training loss")
@@ -153,7 +156,9 @@ def train(epochs: int, batch_size: int, convert: bool = False):
     outputs = tf.keras.layers.Dense(num_classes, activation="softmax")(x)
 
     model = tf.keras.Model(inputs, outputs)
-    model.compile(optimizer=OPTIMIZER, loss="categorical_crossentropy", metrics=["accuracy"])
+    model.compile(
+        optimizer=OPTIMIZER, loss="categorical_crossentropy", metrics=["accuracy"]
+    )
 
     logger.info("Model summary:\n")
     model.summary()
@@ -180,7 +185,7 @@ def train(epochs: int, batch_size: int, convert: bool = False):
     plot(history)
 
     # 12) Inference on original data for sanity check
-    logger.info('Testing model with samples from original data')
+    logger.info("Testing model with samples from original data")
     # 12.1) Pick 10 rows without NaN in the feature columns
     subset = df.dropna(subset=FEATURES).sample(n=10)  # TIP: bump higher, like 100
 
@@ -234,7 +239,9 @@ def train(epochs: int, batch_size: int, convert: bool = False):
     predictions = model.predict(synthetic_data)
     for p in predictions:
         max_idx = np.argmax(p)
-        logger.debug(f"Prediction: {le.inverse_transform([max_idx])[0]}, probabilities: {p}")
+        logger.debug(
+            f"Prediction: {le.inverse_transform([max_idx])[0]}, probabilities: {p}"
+        )
 
     # 13) Save Keras model to TFLite
     if convert:

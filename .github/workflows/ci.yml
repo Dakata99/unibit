@@ -7,8 +7,6 @@ on:
 
 jobs:
   lint-and-test:
-    # TODO: enable this
-    if: ${{ false }}
     runs-on: ubuntu-latest
 
     steps:
@@ -31,6 +29,9 @@ jobs:
 
       - name: Type check
         run: uv run dev-check
+        # TODO: enable this
+        if: ${{ false }}
+
   course-work:
     runs-on: ubuntu-latest
 

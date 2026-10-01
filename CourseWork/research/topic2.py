@@ -21,11 +21,11 @@ except ImportError:
 # URLs (NHANES 2017–2018, suffix _J)
 # ----------------------------
 URLS = {
-    "DEMO_J.xpt":  "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/DEMO_J.xpt",
-    "BIOPRO_J.xpt":"https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/BIOPRO_J.xpt",
+    "DEMO_J.xpt": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/DEMO_J.xpt",
+    "BIOPRO_J.xpt": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/BIOPRO_J.xpt",
     "TCHOL_J.xpt": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/TCHOL_J.xpt",
-    "HEPC_J.xpt":  "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/HEPC_J.xpt",
-    "HEQ_J.xpt":   "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/HEQ_J.xpt",
+    "HEPC_J.xpt": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/HEPC_J.xpt",
+    "HEQ_J.xpt": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/HEQ_J.xpt",
 }
 
 
@@ -59,7 +59,21 @@ NHANES_TO_UCI = {
     "LBXSTP": "PROT",
 }
 
-UCI_COL_ORDER = ["SEQN", "Age", "Sex", "ALB", "ALP", "ALT", "AST", "BIL", "CHOL", "CREA", "GGT", "PROT", "y"]
+UCI_COL_ORDER = [
+    "SEQN",
+    "Age",
+    "Sex",
+    "ALB",
+    "ALP",
+    "ALT",
+    "AST",
+    "BIL",
+    "CHOL",
+    "CREA",
+    "GGT",
+    "PROT",
+    "y",
+]
 
 
 def download_if_missing(data_dir: Path, filename: str) -> None:
@@ -67,7 +81,9 @@ def download_if_missing(data_dir: Path, filename: str) -> None:
     if path.exists():
         return
     if requests is None:
-        raise RuntimeError("requests is not installed. Install it or download XPT files manually.")
+        raise RuntimeError(
+            "requests is not installed. Install it or download XPT files manually."
+        )
     url = URLS[filename]
     print(f"⬇️  Downloading {filename} ...")
     r = requests.get(url, timeout=60)
@@ -77,7 +93,10 @@ def download_if_missing(data_dir: Path, filename: str) -> None:
 
 def read_xpt(path: Path) -> pd.DataFrame:
     df = pd.read_sas(path, format="xport")
-    df.columns = [c.decode("utf-8") if isinstance(c, (bytes, bytearray)) else str(c) for c in df.columns]
+    df.columns = [
+        c.decode("utf-8") if isinstance(c, (bytes, bytearray)) else str(c)
+        for c in df.columns
+    ]
     if "SEQN" not in df.columns:
         raise ValueError(f"{path.name}: missing SEQN")
     df["SEQN"] = pd.to_numeric(df["SEQN"], errors="coerce").astype("Int64")
@@ -87,19 +106,42 @@ def read_xpt(path: Path) -> pd.DataFrame:
 
 def assert_unique_seqn(df: pd.DataFrame, name: str) -> None:
     if df["SEQN"].duplicated().any():
-        dups = df.loc[df["SEQN"].duplicated(keep=False), "SEQN"].dropna().astype("int64").unique()[:20]
-        raise ValueError(f"{name}: SEQN not unique (merge would multiply rows). Example dups: {dups.tolist()}")
+        dups = (
+            df.loc[df["SEQN"].duplicated(keep=False), "SEQN"]
+            .dropna()
+            .astype("int64")
+            .unique()[:20]
+        )
+        raise ValueError(
+            f"{name}: SEQN not unique (merge would multiply rows). Example dups: {dups.tolist()}"
+        )
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--data-dir", type=Path, default=Path("./nhanes_2017_2018"), help="Folder for XPT files")
-    ap.add_argument("--label", choices=["rna", "ab_confirmed", "self_report"], default="rna",
-                    help="Which HCV label to build (default: rna)")
-    ap.add_argument("--sex-as", choices=["numeric", "mf", "MaleFemale"], default="mf",
-                    help="Encode Sex as 1/2, m/f, or Male/Female")
-    ap.add_argument("--drop-missing-any-feature", action="store_true",
-                    help="Drop rows missing ANY UCI-like feature (recommended for clean ML table)")
+    ap.add_argument(
+        "--data-dir",
+        type=Path,
+        default=Path("./nhanes_2017_2018"),
+        help="Folder for XPT files",
+    )
+    ap.add_argument(
+        "--label",
+        choices=["rna", "ab_confirmed", "self_report"],
+        default="rna",
+        help="Which HCV label to build (default: rna)",
+    )
+    ap.add_argument(
+        "--sex-as",
+        choices=["numeric", "mf", "MaleFemale"],
+        default="mf",
+        help="Encode Sex as 1/2, m/f, or Male/Female",
+    )
+    ap.add_argument(
+        "--drop-missing-any-feature",
+        action="store_true",
+        help="Drop rows missing ANY UCI-like feature (recommended for clean ML table)",
+    )
     ap.add_argument("--out", type=Path, default=Path("nhanes_uci_like_with_label.csv"))
     args = ap.parse_args()
 
@@ -126,7 +168,17 @@ def main() -> int:
 
     # Keep minimal columns only (safer + cleaner)
     demo_keep = ["SEQN", "RIDSTATR", "RIDAGEYR", "RIAGENDR"]
-    biopro_keep = ["SEQN", "LBXSAL", "LBXSAPSI", "LBXSATSI", "LBXSASSI", "LBXSTB", "LBXSCR", "LBXSGTSI", "LBXSTP"]
+    biopro_keep = [
+        "SEQN",
+        "LBXSAL",
+        "LBXSAPSI",
+        "LBXSATSI",
+        "LBXSASSI",
+        "LBXSTB",
+        "LBXSCR",
+        "LBXSGTSI",
+        "LBXSTP",
+    ]
     tchol_keep = ["SEQN", "LBXTC"]
     hepc_keep = ["SEQN", "LBXHCR", "LBDHCI"]  # label sources
 
@@ -139,7 +191,12 @@ def main() -> int:
         heq = heq[[c for c in ["SEQN", "HEQ030"] if c in heq.columns]].copy()
 
     # Sanity checks (avoid row multiplication)
-    for name, df in [("DEMO", demo), ("BIOPRO", biopro), ("TCHOL", tchol), ("HEPC", hepc)]:
+    for name, df in [
+        ("DEMO", demo),
+        ("BIOPRO", biopro),
+        ("TCHOL", tchol),
+        ("HEPC", hepc),
+    ]:
         assert_unique_seqn(df, name)
     if heq is not None:
         assert_unique_seqn(heq, "HEQ")
@@ -182,7 +239,9 @@ def main() -> int:
         # numeric: leave as 1/2
 
     # Optionally drop rows missing any feature (and/or missing label)
-    feature_cols = [c for c in UCI_COL_ORDER if c not in ("SEQN", "y") and c in out_df.columns]
+    feature_cols = [
+        c for c in UCI_COL_ORDER if c not in ("SEQN", "y") and c in out_df.columns
+    ]
     if args.drop_missing_any_feature:
         before = len(out_df)
         out_df = out_df.dropna(subset=feature_cols + ["y"]).copy()
@@ -201,7 +260,7 @@ def main() -> int:
     print("Label distribution (y):")
     print(out_df["y"].value_counts(dropna=False))
 
-    print('--------------------------------------')
+    print("--------------------------------------")
 
     # Path to the CSV you exported (change if needed)
     csv_path = Path(args.out)
@@ -211,7 +270,7 @@ def main() -> int:
 
     print(df.shape)
     print(df.columns.tolist())
-    print((df['y'] == 1).sum())
+    print((df["y"] == 1).sum())
 
     return 0
 

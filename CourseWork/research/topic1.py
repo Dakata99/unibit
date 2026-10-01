@@ -24,9 +24,10 @@ Training 2: make everythin important.
 Training 3: rely only on lab tests, drop everything else.
 """
 
+from pathlib import Path
+
 import kagglehub
 import pandas as pd
-from pathlib import Path
 
 # Download dataset
 path = kagglehub.dataset_download("paramjeetsinghds/indian-liver-disease-dataset")
@@ -41,9 +42,9 @@ print(df.info())
 #     print(f"Feature {feature} classes: {df[feature].unique()}")
 
 print(f"Features: {df.columns}")
-print(f"Target: {df["Liver_Disease_Type"]}")
-print(f"Target: {df["Liver_Disease_Type"].unique()}")
-print(df[])
+print(f"Target: {df['Liver_Disease_Type']}")
+print(f"Target: {df['Liver_Disease_Type'].unique()}")
+print(df)
 
 # print('--------------------------------------------------------------')
 # df = df[~df["Liver_Disease_Type"].isin(["Healthy", "Fatty_Liver"])]
